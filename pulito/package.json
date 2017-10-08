@@ -1,0 +1,19 @@
+{
+  "name": "crud-experiment",
+  "version": "1.0.0",
+  "description": "crud-experiment",
+  "main": "server.js",
+  "scripts": {
+    "test": "react"
+  },
+  "keywords": [
+    "react"
+  ],
+  "author": "Rogerio Meneghelo Apezzatto",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "express": "^4.15.3",
+    "mongoose": "^4.10.2"
+  }
+}
