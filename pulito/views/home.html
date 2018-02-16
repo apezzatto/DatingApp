@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="stylesheet" type="text/css" href="./assets/style.css">
+        <meta charset="UTF-8">
+        <title>Title</title>
+    </head>
+    <body>
+        <div id="main-header" class="header">
+            <div class="logo">
+                <a href="/">
+                    <img src=./assets/logo.png />
+                </a>
+            </div>
+        </div>
+        <div>
+            <Menu>
+                <a id="home" class="menu-item" href="/">Home</a>
+                <a id="about" class="menu-item" href="/about">About</a>
+                <a id="contact" class="menu-item" href="/contact">Contact</a>
+            </Menu>
+        </div>
+        <div>
+            <spam><h1>Welcome to Pulito!</h1></spam>
+        </div>
+        <script>
+            function Validation() {
+                var inpObj = document.getElementById("password");
+                if (inpObj.checkValidity() == false) {
+                    document.getElementById("errorArea").innerHTML = inpObj.validationMessage;
+                } else {
+                    document.getElementById("errorArea").innerHTML = "Input OK";
+                }
+            }
+        </script>
+    </body>
+</html>
