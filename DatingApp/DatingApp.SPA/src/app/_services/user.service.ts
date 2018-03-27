@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { Http, RequestOptions, Headers } from '@angular/http';
+import { Http, RequestOptions, Headers, Response } from '@angular/http';
 import { User } from '../_models/User';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
@@ -8,6 +8,7 @@ import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
 import { AuthHttp } from 'angular2-jwt';
+import { PaginatedResult } from '../_models/Pagination';
 
 @Injectable()
 export class UserService {
@@ -15,10 +16,36 @@ export class UserService {
 
     constructor(private authHttp: AuthHttp) {}
 
-    getUsers(): Observable<User[]> {
+    getUsers(pageNumber?: number, itemsPerPage?: number, userParams?: any) {
+        const paginatedResult: PaginatedResult<User[]> = new PaginatedResult<User[]>();
+        let queryString = '?';
+
+        if (pageNumber != null && itemsPerPage != null) {
+            queryString +=
+                'pageNumber=' + pageNumber +
+                '&pageSize=' + itemsPerPage + '&';
+        }
+
+        if (userParams != null) {
+            queryString +=
+                'minAge=' + userParams.minAge +
+                '&maxAge=' + userParams.maxAge +
+                '&gender=' + userParams.gender +
+                '&orderBy=' + userParams.orderBy;
+        }
+
         return this.authHttp
-            .get(this.baseUrl + 'users')
-            .map(response => <User[]>response.json())
+            .get(this.baseUrl + 'users' + queryString)
+            .map((response: Response) => {
+                paginatedResult.result = response.json();
+                console.log(response.json());
+
+                if (response.headers.get('Pagination') != null) {
+                    paginatedResult.pagination = JSON.parse(response.headers.get('Pagination'));
+                }
+
+                return paginatedResult;
+            })
             .catch(this.handleError);
     }
 
