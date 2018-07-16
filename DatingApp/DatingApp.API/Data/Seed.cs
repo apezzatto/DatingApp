@@ -17,7 +17,7 @@ namespace DatingApp.API.Data
             // _context.Users.RemoveRange(_context.Users);
             // _context.SaveChanges();
 
-            if (_context.Users.Any())
+            if (!_context.Users.Any())
             {
                 var userData = System.IO.File.ReadAllText("Data/UserSeedData.json");
                 var users = JsonConvert.DeserializeObject<List<User>>(userData);

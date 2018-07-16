@@ -3,7 +3,7 @@ import { Message } from '../../_models/Message';
 import { UserService } from '../../_services/user.service';
 import { AuthService } from '../../_services/auth.service';
 import { AlertifyService } from '../../_services/alertify.service';
-import 'rxjs/add/operator/do';
+import { tap } from 'rxjs/operators';
 import * as _ from 'underscore';
 
 @Component({
@@ -28,13 +28,13 @@ export class MemberMessagesComponent implements OnInit {
     // the + sign makes the constant be definied as a number, so we can use '===' the stricly equal operator
     const currentUserId = +this.authService.decodedToken.nameid;
     this.userService.getMessageThread(this.authService.decodedToken.nameid, this.userId)
-    .do(messages => {
+    .pipe(tap(messages => {
       _.each(messages, (message: Message) => {
         if (message.isRead === false && message.recipientId === currentUserId) {
           this.userService.markAsRead(currentUserId, message.id);
         }
       });
-    })
+    }))
     .subscribe(messages => {
       this.messages = messages;
     }, error => {

@@ -1,11 +1,8 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { User } from '../_models/User';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/observable/throw';
-import 'rxjs/add/operator/map';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { PaginatedResult } from '../_models/Pagination';
 import { Message } from '../_models/Message';
 import { HttpClient, HttpParams } from '@angular/common/http';
@@ -42,15 +39,17 @@ export class UserService {
 
         return this.authHttp
             .get<User[]>(this.baseUrl + 'users', { observe: 'response', params })
-            .map(response => {
-                paginatedResult.result = response.body;
+            .pipe(
+                map(response => {
+                    paginatedResult.result = response.body;
 
-                if (response.headers.get('Pagination') != null) {
-                    paginatedResult.pagination = JSON.parse(response.headers.get('Pagination'));
-                }
+                    if (response.headers.get('Pagination') != null) {
+                        paginatedResult.pagination = JSON.parse(response.headers.get('Pagination'));
+                    }
 
-                return paginatedResult;
-            });
+                    return paginatedResult;
+                })
+            );
     }
 
     getUser(id): Observable<User> {
@@ -86,15 +85,17 @@ export class UserService {
         }
 
         return this.authHttp.get<Message[]>(this.baseUrl + 'users/' + id + '/messages', {observe: 'response', params})
-            .map(response => {
-                paginatedResult.result = response.body;
+            .pipe(
+                map(response => {
+                    paginatedResult.result = response.body;
 
-                if (response.headers.get('pagination') != null) {
-                    paginatedResult.pagination = JSON.parse(response.headers.get('pagination'));
-                }
+                    if (response.headers.get('pagination') != null) {
+                        paginatedResult.pagination = JSON.parse(response.headers.get('pagination'));
+                    }
 
-                return paginatedResult;
-            });
+                    return paginatedResult;
+                })
+            );
     }
 
     getMessageThread(id: number, recipientId: number) {
